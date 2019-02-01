@@ -7,7 +7,9 @@ import java.awt.event.KeyEvent;
 public class WindowMain {
 
 
-    JFrame window;
+    JFrame jFWindow;
+
+    JTextArea jTAMainEditor;
 
     JMenuBar menuBar;
     JMenu menu;
@@ -16,20 +18,20 @@ public class WindowMain {
     JMenuItem menuItem3;
 
 
+
+
     public WindowMain() {
-        this.window = new JFrame();
-        window.setBounds(100,100, 250,150);
-        window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        this.jFWindow = new JFrame();
+        jFWindow.setBounds(100,100, 600,900);
+        jFWindow.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }
 
     private void initializeComponents() {
+        //Barra del menu superior
         menuBar = new JMenuBar();
-
-        window.setJMenuBar(menuBar);
-
+        jFWindow.setJMenuBar(menuBar);
         menu = new JMenu("Archivo");
         menuBar.add(menu);
-
         menuItem1 = new JMenuItem("Cargar", KeyEvent.VK_CONTROL);
         menuItem1.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, ActionEvent.CTRL_MASK));
         menuItem2= new JMenuItem("Guardar");
@@ -40,6 +42,16 @@ public class WindowMain {
         menu.add(menuItem2);
         menu.add(menuItem3);
 
+        //JTextArea componentes del editor principal
+        jTAMainEditor = new JTextArea();
+        //Hace que siga en la siguente linea
+        jTAMainEditor.setLineWrap(true);
+        //Hace que salte la linea por palabra
+        jTAMainEditor.setWrapStyleWord(true);
+
+        jFWindow.add(jTAMainEditor);
+
+
     }
 
     private void initializeListeners() {
@@ -48,7 +60,7 @@ public class WindowMain {
     }
 
     public void initialize() {
-        window.setVisible(true);
+        jFWindow.setVisible(true);
         initializeComponents();
         initializeListeners();
     }
