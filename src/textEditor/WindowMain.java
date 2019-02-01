@@ -2,6 +2,7 @@ package textEditor;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 
 public class WindowMain {
@@ -31,12 +32,17 @@ public class WindowMain {
         menuBar = new JMenuBar();
         jFWindow.setJMenuBar(menuBar);
         menu = new JMenu("Archivo");
+        menu.setMnemonic(KeyEvent.VK_A);
         menuBar.add(menu);
         menuItem1 = new JMenuItem("Cargar", KeyEvent.VK_CONTROL);
         menuItem1.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, ActionEvent.CTRL_MASK));
+        menuItem1.setMnemonic(KeyEvent.VK_C);
         menuItem2= new JMenuItem("Guardar");
+        menuItem2.setMnemonic(KeyEvent.VK_G);
         menuItem2.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK));
+        menuItem2.setEnabled(false);
         menuItem3 = new JMenuItem("Salir");
+        menuItem3.setMnemonic(KeyEvent.VK_S);
         menuItem3.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, ActionEvent.CTRL_MASK));
         menu.add(menuItem1);
         menu.add(menuItem2);
@@ -49,13 +55,19 @@ public class WindowMain {
         //Hace que salte la linea por palabra
         jTAMainEditor.setWrapStyleWord(true);
 
-        jFWindow.add(jTAMainEditor);
+        JScrollPane jScrollPane = new JScrollPane(jTAMainEditor);
+        jFWindow.add(jScrollPane);
 
 
     }
 
     private void initializeListeners() {
+        menu.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
 
+            }
+        });
 
     }
 

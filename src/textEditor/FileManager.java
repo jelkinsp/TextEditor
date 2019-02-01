@@ -16,12 +16,8 @@ public class FileManager {
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(this.file))) {
             String line ;
             while ((line= bufferedReader.readLine())!=null){
-
-                this.text += "\n"+line;
-
+                this.text += line+"\n";
             }
-
-
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -30,10 +26,9 @@ public class FileManager {
     }
 
     public void writeFile(){
-        try(PrintWriter printWriter = new PrintWriter(new FileWriter(this.file))){
-            printWriter.print(this.text);
+        try(BufferedWriter bufferWriter = new BufferedWriter(new FileWriter(this.file))){
+            bufferWriter.write(this.text);
         } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
