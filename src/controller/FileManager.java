@@ -1,4 +1,4 @@
-package textEditor;
+package controller;
 
 import java.io.*;
 
