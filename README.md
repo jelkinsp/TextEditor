@@ -3,7 +3,7 @@ Editor de texto convecional
 
 * Version = 1.0.0
 
-##Change Log
+## Change Log
 
 **Finsh 1.0.0**
 
