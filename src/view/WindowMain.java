@@ -6,9 +6,7 @@ import model.Images;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 import java.io.File;
 
 public class WindowMain {
@@ -22,10 +20,12 @@ public class WindowMain {
     //Menu
     JMenuBar menuBar;
     JMenu menu;
+    JMenu menu2;
     JMenuItem menuItemLoad;
     JMenuItem menuItemSave;
     JMenuItem menuItemSaveAs;
     JMenuItem menuItemExit;
+    JMenuItem menuItemRemplace;
 
     //Barra de herramientas
     JToolBar jTBMain;
@@ -36,7 +36,11 @@ public class WindowMain {
 
     //Gestor de ficheros
     FileManager fileManager;
-
+    JDialog dialog;
+    JTextPane jTPOrigin;
+    JTextPane jTPDestiny;
+    JButton jBRemplace;
+    private boolean checker;
 
     public WindowMain() {
         this.jFWindow = new JFrame();
@@ -47,6 +51,7 @@ public class WindowMain {
     }
 
     private void initializeComponents() {
+        checker = true;
 //        jFWindow.setLayout(new GridLayout());
         //JTextArea componentes del editor principal
         jTAMainEditor = new JTextArea();
@@ -58,7 +63,7 @@ public class WindowMain {
         JScrollPane jScrollPane = new JScrollPane(jTAMainEditor);
         jFWindow.add(jScrollPane, BorderLayout.CENTER);
 
-        //Barra del menu superior
+        //Barra Archivo del menu superior
         menuBar = new JMenuBar();
         jFWindow.setJMenuBar(menuBar);
         menu = new JMenu("Archivo");
@@ -82,6 +87,15 @@ public class WindowMain {
         menu.add(menuItemSave);
         menu.add(menuItemSaveAs);
         menu.add(menuItemExit);
+
+        //Barra Editar del menu superior
+        menu2 = new JMenu("Editar");
+        menu2.setMnemonic(KeyEvent.VK_E);
+        menuBar.add(menu2);
+        menuItemRemplace = new JMenuItem("Reemplazar", KeyEvent.VK_CONTROL);
+        menuItemRemplace.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, ActionEvent.CTRL_MASK));
+        menuItemRemplace.setMnemonic(KeyEvent.VK_R);
+        menu2.add(menuItemRemplace);
 
 
         //Barra de herramientas
@@ -116,14 +130,14 @@ public class WindowMain {
                 fileChooser.setFileFilter(new FileNameExtensionFilter("Ficheros de texto", "txt"));
                 fileChooser.setAcceptAllFileFilterUsed(false);
                 int result = fileChooser.showOpenDialog(jFWindow);
-                if(result == JFileChooser.APPROVE_OPTION){
+                if (result == JFileChooser.APPROVE_OPTION) {
                     fileManager.setFile(fileChooser.getSelectedFile());
-                    try{
+                    try {
                         jTAMainEditor.setText(fileManager.readFile());
                         jTAMainEditor.requestFocus();
                         menuItemSave.setEnabled(true);
                         menuItemSaveAs.setEnabled(true);
-                    } catch (Exception e1){
+                    } catch (Exception e1) {
                         JOptionPane.showMessageDialog(jFWindow, "Error al abrir el fichero");
                         e1.printStackTrace();
                     }
@@ -138,14 +152,14 @@ public class WindowMain {
                 fileChooser.setFileFilter(new FileNameExtensionFilter("Ficheros de texto", "txt"));
                 fileChooser.setAcceptAllFileFilterUsed(false);
                 int result = fileChooser.showOpenDialog(jFWindow);
-                if(result == JFileChooser.APPROVE_OPTION){
+                if (result == JFileChooser.APPROVE_OPTION) {
                     fileManager.setFile(fileChooser.getSelectedFile());
-                    try{
+                    try {
                         jTAMainEditor.setText(fileManager.readFile());
                         jTAMainEditor.requestFocus();
                         menuItemSave.setEnabled(true);
                         menuItemSaveAs.setEnabled(true);
-                    } catch (Exception e1){
+                    } catch (Exception e1) {
                         JOptionPane.showMessageDialog(jFWindow, "Error al abrir el fichero");
                         e1.printStackTrace();
                     }
@@ -158,7 +172,7 @@ public class WindowMain {
                 try {
                     fileManager.writeFile(jTAMainEditor.getText());
                     JOptionPane.showMessageDialog(jFWindow, "Fichero guardado");
-                } catch (Exception e1){
+                } catch (Exception e1) {
                     JOptionPane.showMessageDialog(jFWindow, "Error al guardar el fichero");
                     e1.printStackTrace();
                 }
@@ -170,7 +184,7 @@ public class WindowMain {
                 try {
                     fileManager.writeFile(jTAMainEditor.getText());
                     JOptionPane.showMessageDialog(jFWindow, "Fichero guardado");
-                } catch (Exception e1){
+                } catch (Exception e1) {
                     JOptionPane.showMessageDialog(jFWindow, "Error al guardar el fichero");
                     e1.printStackTrace();
                 }
@@ -184,10 +198,10 @@ public class WindowMain {
                 fileChooser.setAcceptAllFileFilterUsed(false);
                 fileChooser.setFileFilter(new FileNameExtensionFilter("Ficheros de texto", "txt"));
                 int result = fileChooser.showOpenDialog(jFWindow);
-                if(result == JFileChooser.APPROVE_OPTION){
-                    if(!fileChooser.getSelectedFile().getName().endsWith(".txt")){
-                    String aux = fileChooser.getSelectedFile()+".txt";
-                    fileChooser.setSelectedFile(new File(aux));
+                if (result == JFileChooser.APPROVE_OPTION) {
+                    if (!fileChooser.getSelectedFile().getName().endsWith(".txt")) {
+                        String aux = fileChooser.getSelectedFile() + ".txt";
+                        fileChooser.setSelectedFile(new File(aux));
                     }
                     fileManager.setFile(fileChooser.getSelectedFile());
                     menuItemSave.doClick();
@@ -202,17 +216,46 @@ public class WindowMain {
                 fileChooser.setAcceptAllFileFilterUsed(false);
                 fileChooser.setFileFilter(new FileNameExtensionFilter("Ficheros de texto", "txt"));
                 int result = fileChooser.showOpenDialog(jFWindow);
-                if(result == JFileChooser.APPROVE_OPTION){
-                    if(!fileChooser.getSelectedFile().getName().endsWith(".txt")){
-                    String aux = fileChooser.getSelectedFile()+".txt";
-                    fileChooser.setSelectedFile(new File(aux));
+                if (result == JFileChooser.APPROVE_OPTION) {
+                    if (!fileChooser.getSelectedFile().getName().endsWith(".txt")) {
+                        String aux = fileChooser.getSelectedFile() + ".txt";
+                        fileChooser.setSelectedFile(new File(aux));
                     }
                     fileManager.setFile(fileChooser.getSelectedFile());
                     menuItemSave.doClick();
                 }
             }
         });
-        
+        menuItemRemplace.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (checker) {
+                    checker = false;
+                    dialog = new JDialog(jFWindow, "Remplacar...", false);
+                    dialog.setLayout(new GridLayout(5, 1));
+                    dialog.add(new JLabel("Texto Origen: "));
+                    jTPOrigin = new JTextPane();
+                    dialog.add(jTPOrigin);
+                    dialog.add(new JLabel("Texto Destino: "));
+                    jTPDestiny = new JTextPane();
+                    dialog.add(jTPDestiny);
+                    jBRemplace = new JButton("Reemplazar");
+                    dialog.add(jBRemplace);
+                    dialog.setBounds(jFWindow.getX() * 2, jFWindow.getY() * 2, 300, 300);
+                    dialog.setVisible(true);
+                    //Escucha al boton de cerrar para cambiar la variable a true;
+                    dialog.addWindowListener(new WindowAdapter() {
+                        @Override
+                        public void windowClosing(WindowEvent e) {
+                            super.windowClosing(e);
+                            checker = true;
+                        }
+                    });
+                }
+
+            }
+        });
+
     }
 
     public void initialize() {
