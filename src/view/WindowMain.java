@@ -16,6 +16,7 @@ public class WindowMain {
     JFrame jFWindow;
     //Area de texto principal
     JTextArea jTAMainEditor;
+//    JPanel jPNorth,jPSouth;
 
     //Menu
     JMenuBar menuBar;
@@ -42,14 +43,16 @@ public class WindowMain {
     }
 
     private void initializeComponents() {
-        jFWindow.setLayout(new GridLayout());
-
+//        jFWindow.setLayout(new GridLayout());
         //JTextArea componentes del editor principal
         jTAMainEditor = new JTextArea();
         //Hace que siga en la siguente linea
         jTAMainEditor.setLineWrap(true);
         //Hace que salte la linea por palabra
         jTAMainEditor.setWrapStyleWord(true);
+        //Barra de Scroll
+        JScrollPane jScrollPane = new JScrollPane(jTAMainEditor);
+        jFWindow.add(jScrollPane, BorderLayout.CENTER);
 
         //Barra del menu superior
         menuBar = new JMenuBar();
@@ -75,9 +78,6 @@ public class WindowMain {
         menu.add(menuItemSave);
         menu.add(menuItemSaveAs);
         menu.add(menuItemExit);
-        //Barra de Scroll
-        JScrollPane jScrollPane = new JScrollPane(jTAMainEditor);
-        jFWindow.add(jScrollPane);
 
 
         //Barra de herramientas
@@ -86,12 +86,11 @@ public class WindowMain {
         jTBMain.setFloatable(false);
 
         //Botones dentro de la barra de herramientas
-
         jBLoad = new JButton("Cargar");
         jTBMain.add(jBLoad);
         jBSave = new JButton("Guardar");
         jTBMain.add(jBSave);
-        jFWindow.add(jTBMain);
+        jFWindow.add(jTBMain, BorderLayout.NORTH);
 
 
     }
