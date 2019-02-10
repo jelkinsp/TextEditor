@@ -6,6 +6,7 @@ import model.Images;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.text.DefaultEditorKit;
+import javax.swing.text.Document;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
@@ -126,12 +127,15 @@ public class WindowMain {
         jTBMain.add(jBPaste);
 
         jTFSearch = new JTextField();
-        jTBMain.add(jTFSearch,BorderLayout.EAST);
+        jTBMain.add(jTFSearch, BorderLayout.EAST);
         jBSearch = new JButton(images.getImageSearch());
-        jTBMain.add(jBSearch,BorderLayout.EAST);
+        jTBMain.add(jBSearch, BorderLayout.EAST);
 //        jBCheck = new JButton(images.getImageCheck());
 //        jTBMain.add(jBCheck);
         jFWindow.add(jTBMain, BorderLayout.NORTH);
+        jBRemplace = new JButton("Reemplazar");
+        jTPDestiny = new JTextPane();
+        jTPOrigin = new JTextPane();
 
 
     }
@@ -257,15 +261,15 @@ public class WindowMain {
                     dialog = new JDialog(jFWindow, "Remplacar...", false);
                     dialog.setLayout(new GridLayout(5, 1));
                     dialog.add(new JLabel("Texto Origen: "));
-                    jTPOrigin = new JTextPane();
                     dialog.add(jTPOrigin);
                     dialog.add(new JLabel("Texto Destino: "));
-                    jTPDestiny = new JTextPane();
                     dialog.add(jTPDestiny);
-                    jBRemplace = new JButton("Reemplazar");
+
                     dialog.add(jBRemplace);
                     dialog.setBounds(jFWindow.getX() * 2, jFWindow.getY() * 2, 300, 300);
                     dialog.setVisible(true);
+
+
                     //Escucha al boton de cerrar para cambiar la variable a true;
                     dialog.addWindowListener(new WindowAdapter() {
                         @Override
@@ -278,16 +282,67 @@ public class WindowMain {
 
             }
         });
+        jBRemplace.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                jTAMainEditor.setText(jTAMainEditor.getText().replace(jTPOrigin.getText(), jTPDestiny.getText()));
+            }
+        });
         jBCopy.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                  jTAMainEditor.copy();
+                jTAMainEditor.copy();
             }
         });
         jBPaste.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                  jTAMainEditor.paste();
+                jTAMainEditor.paste();
+            }
+        });
+        jBSearch.addActionListener(new ActionListener() {
+            /**
+             * Copy and Paste
+             * https://stackoverflow.com/questions/13437865/java-scroll-to-specific-text-inside-jtextarea/13438455#13438455
+             *
+             * @param e
+             */
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int pos = 0;
+                String find = jTFSearch.getText().toLowerCase();
+                jTAMainEditor.requestFocusInWindow();
+                if (find != null && find.length() > 0) {
+                    Document document = jTAMainEditor.getDocument();
+                    int findLength = find.length();
+                    try {
+                        boolean found = false;
+                        if (pos + findLength > document.getLength()) {
+                            pos = 0;
+                        }
+                        while (pos + findLength <= document.getLength()) {
+                            String match = document.getText(pos, findLength).toLowerCase();
+                            if (match.equals(find)) {
+                                found = true;
+                                break;
+                            }
+                            pos++;
+                        }
+
+                        if (found) {
+                            Rectangle viewRect = jTAMainEditor.modelToView(pos);
+                            jTAMainEditor.scrollRectToVisible(viewRect);
+                            jTAMainEditor.setCaretPosition(pos + findLength);
+                            jTAMainEditor.moveCaretPosition(pos);
+                            pos += findLength;
+                        } else {
+                            JOptionPane.showMessageDialog(jFWindow, "No se encuentra la palabra que buscas");
+                        }
+
+                    } catch (Exception exp) {
+                        exp.printStackTrace();
+                    }
+                }
             }
         });
 
