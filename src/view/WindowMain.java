@@ -5,6 +5,7 @@ import model.Images;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.text.DefaultEditorKit;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
@@ -30,17 +31,24 @@ public class WindowMain {
     //Barra de herramientas
     JToolBar jTBMain;
 
-    JButton jBSave, jBLoad, jBSaveAs;
+    JButton jBSave;
+    JButton jBLoad;
+    JButton jBSaveAs;
+    JButton jBRemplace;
+    JButton jBCopy;
+    JButton jBPaste;
+    JTextField jTFSearch;
+    JButton jBSearch;
+    JButton jBCheck;
 
     Images images;
 
     //Gestor de ficheros
+    boolean checker;
     FileManager fileManager;
     JDialog dialog;
     JTextPane jTPOrigin;
     JTextPane jTPDestiny;
-    JButton jBRemplace;
-    private boolean checker;
 
     public WindowMain() {
         this.jFWindow = new JFrame();
@@ -59,6 +67,7 @@ public class WindowMain {
         jTAMainEditor.setLineWrap(true);
         //Hace que salte la linea por palabra
         jTAMainEditor.setWrapStyleWord(true);
+        jTAMainEditor.setEnabled(false);
         //Barra de Scroll
         JScrollPane jScrollPane = new JScrollPane(jTAMainEditor);
         jFWindow.add(jScrollPane, BorderLayout.CENTER);
@@ -95,6 +104,7 @@ public class WindowMain {
         menuItemRemplace = new JMenuItem("Reemplazar", KeyEvent.VK_CONTROL);
         menuItemRemplace.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, ActionEvent.CTRL_MASK));
         menuItemRemplace.setMnemonic(KeyEvent.VK_R);
+        menuItemRemplace.setEnabled(false);
         menu2.add(menuItemRemplace);
 
 
@@ -110,6 +120,17 @@ public class WindowMain {
         jTBMain.add(jBSave);
         jBSaveAs = new JButton(images.getImageSaveAs());
         jTBMain.add(jBSaveAs);
+        jBCopy = new JButton(images.getImageCopy());
+        jTBMain.add(jBCopy);
+        jBPaste = new JButton(images.getImagePaste());
+        jTBMain.add(jBPaste);
+
+        jTFSearch = new JTextField();
+        jTBMain.add(jTFSearch,BorderLayout.EAST);
+        jBSearch = new JButton(images.getImageSearch());
+        jTBMain.add(jBSearch,BorderLayout.EAST);
+//        jBCheck = new JButton(images.getImageCheck());
+//        jTBMain.add(jBCheck);
         jFWindow.add(jTBMain, BorderLayout.NORTH);
 
 
@@ -137,6 +158,8 @@ public class WindowMain {
                         jTAMainEditor.requestFocus();
                         menuItemSave.setEnabled(true);
                         menuItemSaveAs.setEnabled(true);
+                        menuItemRemplace.setEnabled(true);
+                        jTAMainEditor.setEnabled(true);
                     } catch (Exception e1) {
                         JOptionPane.showMessageDialog(jFWindow, "Error al abrir el fichero");
                         e1.printStackTrace();
@@ -253,6 +276,18 @@ public class WindowMain {
                     });
                 }
 
+            }
+        });
+        jBCopy.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                  jTAMainEditor.copy();
+            }
+        });
+        jBPaste.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                  jTAMainEditor.paste();
             }
         });
 
