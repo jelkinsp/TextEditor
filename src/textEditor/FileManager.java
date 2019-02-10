@@ -5,32 +5,39 @@ import java.io.*;
 public class FileManager {
 
     private File file;
-    private String text;
 
-    public FileManager(File file) {
-        this.file = file;
-        this.text ="";
+    public FileManager() {
+        this.file = new File(System.getProperty("user.home"));
     }
 
-    public void readFile() {
+    public String readFile() {
+        String line;
+        String aux = "";
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(this.file))) {
-            String line ;
-            while ((line= bufferedReader.readLine())!=null){
-                this.text += line+"\n";
+            while ((line = bufferedReader.readLine()) != null) {
+                aux += line + "\n";
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return aux;
     }
 
-    public void writeFile(){
-        try(BufferedWriter bufferWriter = new BufferedWriter(new FileWriter(this.file))){
-            bufferWriter.write(this.text);
+    public void writeFile(String text) {
+        try (BufferedWriter bufferWriter = new BufferedWriter(new FileWriter(this.file))) {
+            bufferWriter.write(text);
         } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
+    public File getFile() {
+        return file;
+    }
 
+    public void setFile(File file) {
+        this.file = file;
+    }
 }
