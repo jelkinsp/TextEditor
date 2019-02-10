@@ -1,6 +1,7 @@
 package view;
 
 import controller.FileManager;
+import model.Images;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -29,7 +30,9 @@ public class WindowMain {
     //Barra de herramientas
     JToolBar jTBMain;
 
-    JButton jBSave, jBLoad;
+    JButton jBSave, jBLoad, jBSaveAs;
+
+    Images images;
 
     //Gestor de ficheros
     FileManager fileManager;
@@ -40,6 +43,7 @@ public class WindowMain {
         jFWindow.setBounds(100, 100, 600, 900);
         jFWindow.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         fileManager = new FileManager();
+        images = new Images(fileManager);
     }
 
     private void initializeComponents() {
@@ -86,10 +90,12 @@ public class WindowMain {
         jTBMain.setFloatable(false);
 
         //Botones dentro de la barra de herramientas
-        jBLoad = new JButton("Cargar");
+        jBLoad = new JButton(images.getImageLoad());
         jTBMain.add(jBLoad);
-        jBSave = new JButton("Guardar");
+        jBSave = new JButton(images.getImageSave());
         jTBMain.add(jBSave);
+        jBSaveAs = new JButton(images.getImageSaveAs());
+        jTBMain.add(jBSaveAs);
         jFWindow.add(jTBMain, BorderLayout.NORTH);
 
 
@@ -124,7 +130,41 @@ public class WindowMain {
                 }
             }
         });
+        jBLoad.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFileChooser fileChooser = new JFileChooser();
+                fileChooser.setCurrentDirectory(fileManager.getFile());
+                fileChooser.setFileFilter(new FileNameExtensionFilter("Ficheros de texto", "txt"));
+                fileChooser.setAcceptAllFileFilterUsed(false);
+                int result = fileChooser.showOpenDialog(jFWindow);
+                if(result == JFileChooser.APPROVE_OPTION){
+                    fileManager.setFile(fileChooser.getSelectedFile());
+                    try{
+                        jTAMainEditor.setText(fileManager.readFile());
+                        jTAMainEditor.requestFocus();
+                        menuItemSave.setEnabled(true);
+                        menuItemSaveAs.setEnabled(true);
+                    } catch (Exception e1){
+                        JOptionPane.showMessageDialog(jFWindow, "Error al abrir el fichero");
+                        e1.printStackTrace();
+                    }
+                }
+            }
+        });
         menuItemSave.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    fileManager.writeFile(jTAMainEditor.getText());
+                    JOptionPane.showMessageDialog(jFWindow, "Fichero guardado");
+                } catch (Exception e1){
+                    JOptionPane.showMessageDialog(jFWindow, "Error al guardar el fichero");
+                    e1.printStackTrace();
+                }
+            }
+        });
+        jBSave.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
@@ -154,9 +194,25 @@ public class WindowMain {
                 }
             }
         });
-
-
-
+        jBSaveAs.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFileChooser fileChooser = new JFileChooser();
+                fileChooser.setCurrentDirectory(fileManager.getFile());
+                fileChooser.setAcceptAllFileFilterUsed(false);
+                fileChooser.setFileFilter(new FileNameExtensionFilter("Ficheros de texto", "txt"));
+                int result = fileChooser.showOpenDialog(jFWindow);
+                if(result == JFileChooser.APPROVE_OPTION){
+                    if(!fileChooser.getSelectedFile().getName().endsWith(".txt")){
+                    String aux = fileChooser.getSelectedFile()+".txt";
+                    fileChooser.setSelectedFile(new File(aux));
+                    }
+                    fileManager.setFile(fileChooser.getSelectedFile());
+                    menuItemSave.doClick();
+                }
+            }
+        });
+        
     }
 
     public void initialize() {
