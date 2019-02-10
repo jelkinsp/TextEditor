@@ -1,4 +1,4 @@
-package textEditor;
+package view;
 
 import java.awt.*;
 

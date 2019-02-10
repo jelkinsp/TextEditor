@@ -1,7 +1,10 @@
-package textEditor;
+package view;
+
+import controller.FileManager;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -9,11 +12,12 @@ import java.io.File;
 
 public class WindowMain {
 
-
+    //Ventana Principal
     JFrame jFWindow;
-
+    //Area de texto principal
     JTextArea jTAMainEditor;
 
+    //Menu
     JMenuBar menuBar;
     JMenu menu;
     JMenuItem menuItemLoad;
@@ -21,6 +25,12 @@ public class WindowMain {
     JMenuItem menuItemSaveAs;
     JMenuItem menuItemExit;
 
+    //Barra de herramientas
+    JToolBar jTBMain;
+
+    JButton jBSave, jBLoad;
+
+    //Gestor de ficheros
     FileManager fileManager;
 
 
@@ -32,6 +42,15 @@ public class WindowMain {
     }
 
     private void initializeComponents() {
+        jFWindow.setLayout(new GridLayout());
+
+        //JTextArea componentes del editor principal
+        jTAMainEditor = new JTextArea();
+        //Hace que siga en la siguente linea
+        jTAMainEditor.setLineWrap(true);
+        //Hace que salte la linea por palabra
+        jTAMainEditor.setWrapStyleWord(true);
+
         //Barra del menu superior
         menuBar = new JMenuBar();
         jFWindow.setJMenuBar(menuBar);
@@ -43,11 +62,11 @@ public class WindowMain {
         menuItemLoad.setMnemonic(KeyEvent.VK_C);
         menuItemSave = new JMenuItem("Guardar");
         menuItemSave.setMnemonic(KeyEvent.VK_G);
-        menuItemSave.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK + ActionEvent.SHIFT_MASK));
+        menuItemSave.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK));
         menuItemSave.setEnabled(false);
         menuItemSaveAs = new JMenuItem("Guardar como...");
         menuItemSaveAs.setMnemonic(KeyEvent.VK_G);
-        menuItemSaveAs.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK));
+        menuItemSaveAs.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK + ActionEvent.SHIFT_MASK));
         menuItemSaveAs.setEnabled(false);
         menuItemExit = new JMenuItem("Salir");
         menuItemExit.setMnemonic(KeyEvent.VK_S);
@@ -56,16 +75,23 @@ public class WindowMain {
         menu.add(menuItemSave);
         menu.add(menuItemSaveAs);
         menu.add(menuItemExit);
-
-        //JTextArea componentes del editor principal
-        jTAMainEditor = new JTextArea();
-        //Hace que siga en la siguente linea
-        jTAMainEditor.setLineWrap(true);
-        //Hace que salte la linea por palabra
-        jTAMainEditor.setWrapStyleWord(true);
-
+        //Barra de Scroll
         JScrollPane jScrollPane = new JScrollPane(jTAMainEditor);
         jFWindow.add(jScrollPane);
+
+
+        //Barra de herramientas
+        jTBMain = new JToolBar();
+        //Impide mover barra de herramientas
+        jTBMain.setFloatable(false);
+
+        //Botones dentro de la barra de herramientas
+
+        jBLoad = new JButton("Cargar");
+        jTBMain.add(jBLoad);
+        jBSave = new JButton("Guardar");
+        jTBMain.add(jBSave);
+        jFWindow.add(jTBMain);
 
 
     }
