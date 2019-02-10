@@ -5,6 +5,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.io.File;
 
 public class WindowMain {
 
@@ -101,19 +102,31 @@ public class WindowMain {
         menuItemSave.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-//                try {
-//                    fileManager.writeFile(jTAMainEditor.getText());
-//                    JOptionPane.showMessageDialog(jFWindow, "Fichero guardado");
-//                } catch (Exception e1){
-//                    JOptionPane.showMessageDialog(jFWindow, "Error al guardar el fichero");
-//                    e1.printStackTrace();
-//                }
+                try {
+                    fileManager.writeFile(jTAMainEditor.getText());
+                    JOptionPane.showMessageDialog(jFWindow, "Fichero guardado");
+                } catch (Exception e1){
+                    JOptionPane.showMessageDialog(jFWindow, "Error al guardar el fichero");
+                    e1.printStackTrace();
+                }
             }
         });
         menuItemSaveAs.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                JFileChooser fileChooser = new JFileChooser();
+                fileChooser.setCurrentDirectory(fileManager.getFile());
+                fileChooser.setAcceptAllFileFilterUsed(false);
+                fileChooser.setFileFilter(new FileNameExtensionFilter("Ficheros de texto", "txt"));
+                int result = fileChooser.showOpenDialog(jFWindow);
+                if(result == JFileChooser.APPROVE_OPTION){
+                    if(!fileChooser.getSelectedFile().getName().endsWith(".txt")){
+                    String aux = fileChooser.getSelectedFile()+".txt";
+                    fileChooser.setSelectedFile(new File(aux));
+                    }
+                    fileManager.setFile(fileChooser.getSelectedFile());
+                    menuItemSave.doClick();
+                }
             }
         });
 
