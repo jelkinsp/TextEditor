@@ -5,6 +5,12 @@ import controller.FileManager;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Clase intermediaria entre el controlador y la vista
+ *
+ *  @author : Jose Luis Luengo Ramos
+ *
+ */
 public class Images {
 
     private FileManager fileManager;
@@ -24,6 +30,10 @@ public class Images {
         getBuferedImage();
     }
 
+    /**
+     * Obtiene todos los buffered y lo pasa a imagenIcon, para escalarlos los paso previamentea Image
+     *
+     */
     private void getBuferedImage() {
         //ImagePath || Pirula! x.x, seguro que hay una forma mas elegante de hacer esto, lo siento. u.u
         this.imagePath = new ImageIcon(this.fileManager.getImageLoad());
@@ -43,6 +53,11 @@ public class Images {
 
     }
 
+    /**
+     * GETTERS
+     *
+     * @return
+     */
     public ImageIcon getImageLoad() {
         return imageLoad;
     }
@@ -55,9 +70,6 @@ public class Images {
         return imageSaveAs;
     }
 
-    public ImageIcon getImagePath() {
-        return imagePath;
-    }
 
     public ImageIcon getImageCopy() {
         return imageCopy;

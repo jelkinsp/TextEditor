@@ -5,19 +5,23 @@ import model.Images;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.text.DefaultEditorKit;
 import javax.swing.text.Document;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 
+/**
+ * Ventana principal
+ *
+ * @author : Jose Luis Luengo Ramos
+ *
+ */
 public class WindowMain {
 
     //Ventana Principal
     JFrame jFWindow;
     //Area de texto principal
     JTextArea jTAMainEditor;
-//    JPanel jPNorth,jPSouth;
 
     //Menu
     JMenuBar menuBar;
@@ -31,7 +35,7 @@ public class WindowMain {
 
     //Barra de herramientas
     JToolBar jTBMain;
-
+    //Componentes de la barra de herramientas
     JButton jBSave;
     JButton jBLoad;
     JButton jBSaveAs;
@@ -59,6 +63,9 @@ public class WindowMain {
         images = new Images(fileManager);
     }
 
+    /**
+     * Inicia los componentes
+     */
     private void initializeComponents() {
         checker = true;
 //        jFWindow.setLayout(new GridLayout());
@@ -140,6 +147,9 @@ public class WindowMain {
 
     }
 
+    /**
+     * Inicial los Listeners
+     */
     private void initializeListeners() {
         menuItemExit.addActionListener(new ActionListener() {
             @Override

@@ -4,6 +4,12 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
 
+/**
+ *
+ * Clase que gestiona las obteciones del fichero.
+ *
+ * @author : Jose Luis Luengo Ramos
+ */
 public class FileManager {
 
     private final String LOAD_PATH="image/fileopen.png";
@@ -42,6 +48,10 @@ public class FileManager {
         }
     }
 
+    /**
+     * Leer fichero
+     * @return retorna la lectura del fichero
+     */
     public String readFile() {
         String line;
         String aux = "";
@@ -57,6 +67,11 @@ public class FileManager {
         return aux;
     }
 
+    /**
+     * Escribe en el fichero
+     *
+     * @param text : Texto a escribir en el fichero
+     */
     public void writeFile(String text) {
         try (BufferedWriter bufferWriter = new BufferedWriter(new FileWriter(this.file))) {
             bufferWriter.write(text);
@@ -65,6 +80,10 @@ public class FileManager {
         }
     }
 
+    /**
+     * GETTERS AND SETTERS
+     *
+     */
     public File getFile() {
         return file;
     }
